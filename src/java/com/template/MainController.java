@@ -1,4 +1,3 @@
-
 package com.template;
 
 import javafx.collections.FXCollections;
@@ -14,93 +13,158 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class MainController
 {
     @FXML private TextField txtId;
-    @FXML private TextField txtNome;
-    @FXML private TextField txtSenha;
+    @FXML private TextField txtTitulo;
+    @FXML private TextField txtAutor;
+    @FXML private TextField txtAno;
 
-    @FXML private TableView<LivroDTO> tabelaUsuarios;
+    @FXML private TableView<LivroDTO> tabelaLivros;
+
     @FXML private TableColumn<LivroDTO, Integer> colId;
-    @FXML private TableColumn<LivroDTO, String> colNome;
+    @FXML private TableColumn<LivroDTO, String> colTitulo;
+    @FXML private TableColumn<LivroDTO, String> colAutor;
+    @FXML private TableColumn<LivroDTO, Integer> colAno;
 
     @FXML private Button btnCadastrar;
     @FXML private Button btnListar;
     @FXML private Button btnApagar;
+    @FXML private Button btnAtualizar;
+    @FXML private Button btnLimpar;
     @FXML private Button btnBuscar;
-//    @FXML private Button btnLimpar;
-   //git commit -m "first commit" @FXML private Button btnAtualizar;
 
-    private LivroDAO livtoDAO = new LivroDAO();
-
-    @FXML
-    private void btnCadastrarAction(ActionEvent event) {
-       LivroDTO objLivroDTO = new LivroDTO();
-        objLivroDTO.setNome(txtNome.getText());
-        usuarioDAO.cadastrarUsuario(objLivroDTO);
-        btnListarAction(event);
-        btnLimparAction(event);
-    }
-
-    @FXML
-    private void btnListarAction(ActionEvent event) {
-        try {
-            ObservableList<LivroDTO> lista = FXCollections.observableArrayList(LivroDAO.listarUsuarios());
-            tabelaUsuarios.setItems(lista);
-        } catch (Exception e) {
-            System.out.println("Erro ao listar na tabela: " + e.getMessage());
-        }
-    }
-
-    @FXML
-    private void btnBuscarAction(ActionEvent event) {
-        if (!txtId.getText().isEmpty()) {
-            int id = Integer.parseInt(txtId.getText());
-           LivroDTO dto = LivroDTO.buscarUsuarioPorId(id);
-
-            if (dto != null) {
-                txtNome.setText(dto.getNome());
-            } else {
-                System.out.println("Usuário não encontrado!");
-            }
-        }
-    }
-
-    @FXML
-    private void btnAtualizarAction(ActionEvent event) {
-        LivroDTO objLivroDTO = new LivroDTO();
-        objLivroDTO.setId(Integer.parseInt(txtId.getText()));
-        objLivroDTO.setNome(txtNome.getText());
-
-        LivroDAO.alterarUsuario(objLivroDTO);
-
-        btnListarAction(event);
-        btnLimparAction(event);
-    }
-
-    @FXML
-    private void btnApagarAction(ActionEvent event) {
-        if (!txtId.getText().isEmpty()) {
-            int id = Integer.parseInt(txtId.getText());
-            LivroDAO.excluirUsuario(id);
-
-            btnListarAction(event);
-            btnLimparAction(event);
-        }
-    }
-
-    @FXML
-    private void btnLimparAction(ActionEvent event) {
-        txtId.clear();
-        txtNome.clear();
-        if (txtSenha != null) txtSenha.clear();
-    }
+    private LivroDAO livroDAO = new LivroDAO();
 
     @FXML
     private void initialize()
     {
-        System.out.println("FXML loaded successfully!");
-        if (colId != null && colNome != null) {
-            colId.setCellValueFactory(new PropertyValueFactory<>("id"));
-            colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
-            btnListarAction(null);
+        System.out.println("FXML carregado!");
+
+        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
+        colAutor.setCellValueFactory(new PropertyValueFactory<>("autor"));
+        colAno.setCellValueFactory(new PropertyValueFactory<>("ano_publicacao"));
+
+        carregarLivros();
+    }
+
+
+    private void carregarLivros()
+    {
+        try {
+            ObservableList<LivroDTO> lista =
+                    FXCollections.observableArrayList(livroDAO.listarLivros());
+
+            tabelaLivros.setItems(lista);
+
+        } catch (Exception e) {
+            System.out.println("Erro ao carregar livros: " + e.getMessage());
+        }
+    }
+
+
+    @FXML
+    private void btnCadastrarAction(ActionEvent event)
+    {
+        LivroDTO livro = new LivroDTO();
+
+        livro.setTitulo(txtTitulo.getText());
+        livro.setAutor(txtAutor.getText());
+        livro.setAno_publicacao(Integer.parseInt(txtAno.getText()));
+
+        livroDAO.cadastrarLivro(livro);
+
+        carregarLivros();
+        limparCampos();
+    }
+
+
+    @FXML
+    private void btnListarAction(ActionEvent event)
+    {
+        carregarLivros();
+    }
+
+
+    @FXML
+    private void btnBuscarAction(ActionEvent event)
+    {
+        if (!txtId.getText().isEmpty())
+        {
+            int id = Integer.parseInt(txtId.getText());
+
+            LivroDTO livro = livroDAO.buscarPorId(id);
+
+            if (livro != null)
+            {
+                txtTitulo.setText(livro.getTitulo());
+                txtAutor.setText(livro.getAutor());
+                txtAno.setText(String.valueOf(livro.getAno_publicacao()));
+            }
+            else
+            {
+                System.out.println("Livro não encontrado!");
+            }
+        }
+    }
+
+
+    @FXML
+    private void btnAtualizarAction(ActionEvent event)
+    {
+        LivroDTO livro = new LivroDTO();
+
+        livro.setId(Integer.parseInt(txtId.getText()));
+        livro.setTitulo(txtTitulo.getText());
+        livro.setAutor(txtAutor.getText());
+        livro.setAno_publicacao(Integer.parseInt(txtAno.getText()));
+
+        livroDAO.atualizarLivro(livro);
+
+        carregarLivros();
+        limparCampos();
+    }
+
+
+    @FXML
+    private void btnApagarAction(ActionEvent event)
+    {
+        if (!txtId.getText().isEmpty())
+        {
+            int id = Integer.parseInt(txtId.getText());
+
+            livroDAO.deletarLivro(id);
+
+            carregarLivros();
+            limparCampos();
+        }
+    }
+
+
+    @FXML
+    private void btnLimparAction(ActionEvent event)
+    {
+        limparCampos();
+    }
+
+
+    private void limparCampos()
+    {
+        txtId.clear();
+        txtTitulo.clear();
+        txtAutor.clear();
+        txtAno.clear();
+    }
+
+    @FXML
+    private void selecionarLivro()
+    {
+        LivroDTO livro = tabelaLivros.getSelectionModel().getSelectedItem();
+
+        if (livro != null)
+        {
+            txtId.setText(String.valueOf(livro.getId()));
+            txtTitulo.setText(livro.getTitulo());
+            txtAutor.setText(livro.getAutor());
+            txtAno.setText(String.valueOf(livro.getAno_publicacao()));
         }
     }
 }

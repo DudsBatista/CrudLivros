@@ -1,6 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.template.MainController" />
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.template.MainController">
+   <children>
+      <Pane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #E6D7FF;">
+         <children>
+            <Label layoutX="198.0" layoutY="28.0" prefHeight="42.0" prefWidth="230.0" text="Cadastrar Livros">
+               <font>
+                  <Font name="Yuppy SC Regular" size="30.0" />
+               </font>
+            </Label>
+            <TableView layoutX="48.0" layoutY="215.0" prefHeight="161.0" prefWidth="406.0">
+              <columns>
+                <TableColumn prefWidth="38.0" text="ID" />
+                <TableColumn prefWidth="138.0" text="Titulo" />
+                  <TableColumn prefWidth="126.0" text="Autor" />
+                  <TableColumn prefWidth="103.0" text="ano Publicação" />
+              </columns>
+            </TableView>
+            <VBox layoutX="496.0" layoutY="104.0" prefHeight="111.0" prefWidth="69.0" spacing="15.0">
+               <children>
+                  <Button fx:id="btnLimpar" mnemonicParsing="false" onAction="#btnLimparAction" prefHeight="26.0" prefWidth="77.0" style="-fx-background-color: #C8A2C8;" text="Limpar" />
+                  <Button fx:id="btnSalvar" mnemonicParsing="false" onAction="#btnLimparAction" prefHeight="26.0" prefWidth="73.0" style="-fx-background-color: #C8A2C8;" text="Salvar" />
+                  <Button fx:id="btnAtualizar" mnemonicParsing="false" onAction="#btnAtualizarAction" prefHeight="26.0" prefWidth="73.0" style="-fx-background-color: #C8A2C8;" text="Atualizar" />
+                  <Button fx:id="btnDeletar" mnemonicParsing="false" onAction="#btnDeletarAction" prefHeight="26.0" prefWidth="73.0" style="-fx-background-color: #C8A2C8;" text="Deletar" />
+                  <Button fx:id="btnListar" mnemonicParsing="false" onAction="#btnListarAction" prefHeight="26.0" prefWidth="73.0" style="-fx-background-color: #C8A2C8;" text="Listar" />
+               </children>
+            </VBox>
+            <VBox layoutX="116.0" layoutY="104.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
+               <children>
+                  <TextField prefHeight="26.0" prefWidth="126.0" />
+                  <TextField prefHeight="26.0" prefWidth="126.0" />
+               </children>
+            </VBox>
+            <VBox layoutX="294.0" layoutY="104.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
+               <children>
+                  <TextField prefHeight="26.0" prefWidth="126.0" />
+                  <TextField prefHeight="26.0" prefWidth="126.0" />
+                  <TextField prefHeight="26.0" prefWidth="126.0" />
+               </children>
+            </VBox>
+            <Label layoutX="94.0" layoutY="104.0" prefHeight="17.0" prefWidth="20.0" text="ID:" />
+            <Label layoutX="75.0" layoutY="144.0" prefHeight="17.0" prefWidth="37.0" text="Nome:" />
+            <Label layoutX="251.0" layoutY="113.0" prefHeight="17.0" prefWidth="37.0" text="Título:" />
+            <Label layoutX="251.0" layoutY="144.0" prefHeight="17.0" prefWidth="37.0" text="Autor:" />
+            <Label layoutX="207.0" layoutY="182.0" prefHeight="17.0" prefWidth="88.0" text="Ano Publicação:" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
