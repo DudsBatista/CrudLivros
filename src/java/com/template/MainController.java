@@ -25,8 +25,8 @@ public class MainController
     @FXML private Button btnListar;
     @FXML private Button btnApagar;
     @FXML private Button btnBuscar;
-    @FXML private Button btnLimpar;
-    @FXML private Button btnAtualizar;
+//    @FXML private Button btnLimpar;
+   //git commit -m "first commit" @FXML private Button btnAtualizar;
 
     private LivroDAO livtoDAO = new LivroDAO();
 
