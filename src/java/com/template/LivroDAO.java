@@ -30,8 +30,8 @@ public class LivroDAO {
         }
     }
 
-    public List<LivroDTO> listarLivros() {
-        List<LivroDTO> lista = new ArrayList<>();
+    public ArrayList<LivroDTO> listarLivros() {
+        ArrayList<LivroDTO> lista = new ArrayList<>();
         String sql = "SELECT * FROM livros";
 
         try (Connection con = new Conexao().conectabBD();
@@ -109,7 +109,6 @@ public class LivroDAO {
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Erro ao buscar livro por ID", e);
         }
-
         return livro;
     }
 }

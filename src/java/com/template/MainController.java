@@ -32,6 +32,19 @@ public class MainController
     @FXML private Button btnBuscar;
 
     private LivroDAO livroDAO = new LivroDAO();
+    @FXML
+    private void carregarLivros() //objeto dto recebe os objetos da tabela, a classe dto foi criada mais pra cima, ele identifica pq no initialize ja ta falando o que eh qual
+    {
+        try {
+            ObservableList<LivroDTO> lista =
+                    FXCollections.observableArrayList(livroDAO.listarLivros());
+
+            tabelaLivros.setItems(lista);
+
+        } catch (Exception e) {
+            System.out.println("Erro ao carregar livros: " + e.getMessage());
+        }
+    }
 
     @FXML
     private void initialize()
@@ -44,20 +57,6 @@ public class MainController
         colAno.setCellValueFactory(new PropertyValueFactory<>("ano_publicacao"));
 
         carregarLivros();
-    }
-
-
-    private void carregarLivros()
-    {
-        try {
-            ObservableList<LivroDTO> lista =
-                    FXCollections.observableArrayList(livroDAO.listarLivros());
-
-            tabelaLivros.setItems(lista);
-
-        } catch (Exception e) {
-            System.out.println("Erro ao carregar livros: " + e.getMessage());
-        }
     }
 
 

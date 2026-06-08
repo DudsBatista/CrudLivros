@@ -19,41 +19,39 @@
                   <Font name="Yuppy SC Regular" size="30.0" />
                </font>
             </Label>
-            <TableView layoutX="48.0" layoutY="215.0" prefHeight="161.0" prefWidth="406.0">
+            <TableView fx:id="tabelaLivros" layoutX="48.0" layoutY="215.0" onMouseClicked="#selecionarLivro" prefHeight="161.0" prefWidth="406.0">
               <columns>
-                <TableColumn prefWidth="38.0" text="ID" />
-                <TableColumn prefWidth="138.0" text="Titulo" />
-                  <TableColumn prefWidth="126.0" text="Autor" />
-                  <TableColumn prefWidth="103.0" text="ano Publicação" />
+                <TableColumn fx:id="colId" prefWidth="38.0" text="Id" />
+                <TableColumn fx:id="colTitulo" prefWidth="138.0" text="Titulo" />
+                  <TableColumn fx:id="colAutor" prefWidth="143.0" text="Autor" />
+                  <TableColumn fx:id="colAno" prefWidth="86.0" text="Ano" />
               </columns>
             </TableView>
-            <VBox layoutX="496.0" layoutY="104.0" prefHeight="111.0" prefWidth="69.0" spacing="15.0">
+            <VBox layoutX="487.0" layoutY="104.0" prefHeight="190.0" prefWidth="78.0" spacing="15.0">
                <children>
                   <Button fx:id="btnLimpar" mnemonicParsing="false" onAction="#btnLimparAction" prefHeight="26.0" prefWidth="77.0" style="-fx-background-color: #C8A2C8;" text="Limpar" />
-                  <Button fx:id="btnSalvar" mnemonicParsing="false" onAction="#btnLimparAction" prefHeight="26.0" prefWidth="73.0" style="-fx-background-color: #C8A2C8;" text="Salvar" />
+                  <Button fx:id="btnCadastrar" mnemonicParsing="false" onAction="#btnCadastrarAction" prefHeight="26.0" prefWidth="73.0" style="-fx-background-color: #C8A2C8;" text="Cadastrar" />
                   <Button fx:id="btnAtualizar" mnemonicParsing="false" onAction="#btnAtualizarAction" prefHeight="26.0" prefWidth="73.0" style="-fx-background-color: #C8A2C8;" text="Atualizar" />
-                  <Button fx:id="btnDeletar" mnemonicParsing="false" onAction="#btnDeletarAction" prefHeight="26.0" prefWidth="73.0" style="-fx-background-color: #C8A2C8;" text="Deletar" />
+                  <Button fx:id="btnApagar" mnemonicParsing="false" onAction="#btnApagarAction" prefHeight="26.0" prefWidth="73.0" style="-fx-background-color: #C8A2C8;" text="Apagar" />
                   <Button fx:id="btnListar" mnemonicParsing="false" onAction="#btnListarAction" prefHeight="26.0" prefWidth="73.0" style="-fx-background-color: #C8A2C8;" text="Listar" />
                </children>
             </VBox>
-            <VBox layoutX="116.0" layoutY="104.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
+            <VBox layoutX="143.0" layoutY="108.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
                <children>
-                  <TextField prefHeight="26.0" prefWidth="126.0" />
-                  <TextField prefHeight="26.0" prefWidth="126.0" />
+                  <TextField fx:id="txtId" prefHeight="26.0" prefWidth="126.0" />
+                  <TextField fx:id="txtAno" prefHeight="26.0" prefWidth="126.0" />
                </children>
             </VBox>
-            <VBox layoutX="294.0" layoutY="104.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
+            <VBox layoutX="321.0" layoutY="108.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
                <children>
-                  <TextField prefHeight="26.0" prefWidth="126.0" />
-                  <TextField prefHeight="26.0" prefWidth="126.0" />
-                  <TextField prefHeight="26.0" prefWidth="126.0" />
+                  <TextField fx:id="txtTitulo" prefHeight="26.0" prefWidth="126.0" />
+                  <TextField fx:id="txtAutor" prefHeight="26.0" prefWidth="126.0" />
                </children>
             </VBox>
-            <Label layoutX="94.0" layoutY="104.0" prefHeight="17.0" prefWidth="20.0" text="ID:" />
-            <Label layoutX="75.0" layoutY="144.0" prefHeight="17.0" prefWidth="37.0" text="Nome:" />
-            <Label layoutX="251.0" layoutY="113.0" prefHeight="17.0" prefWidth="37.0" text="Título:" />
-            <Label layoutX="251.0" layoutY="144.0" prefHeight="17.0" prefWidth="37.0" text="Autor:" />
-            <Label layoutX="207.0" layoutY="182.0" prefHeight="17.0" prefWidth="88.0" text="Ano Publicação:" />
+            <Label layoutX="121.0" layoutY="108.0" prefHeight="17.0" prefWidth="20.0" text="ID:" />
+            <Label layoutX="278.0" layoutY="117.0" prefHeight="17.0" prefWidth="37.0" text="Título:" />
+            <Label layoutX="278.0" layoutY="148.0" prefHeight="17.0" prefWidth="37.0" text="Autor:" />
+            <Label layoutX="53.0" layoutY="148.0" prefHeight="17.0" prefWidth="104.0" text="Ano Publicação:" />
          </children>
       </Pane>
    </children>
