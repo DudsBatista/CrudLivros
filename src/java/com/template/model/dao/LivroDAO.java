@@ -1,13 +1,17 @@
-package com.template;
+package com.template.model.dao;
+
+import com.template.model.Conexao;
+import com.template.model.dto.LivroDTO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static com.template.util.DialogUtil.showError;
 
 public class LivroDAO {
 
@@ -27,6 +31,7 @@ public class LivroDAO {
 
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Erro ao cadastrar livro", e);
+            showError("ERRO");
         }
     }
 
@@ -51,6 +56,7 @@ public class LivroDAO {
 
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Erro ao listar livros", e);
+            showError("ERRO");
         }
 
         return lista;
@@ -71,6 +77,7 @@ public class LivroDAO {
 
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Erro ao atualizar livro", e);
+            showError("ERRO");
         }
     }
 
@@ -85,6 +92,7 @@ public class LivroDAO {
 
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Erro ao deletar livro", e);
+            showError("ERRO");
         }
     }
 
@@ -108,6 +116,7 @@ public class LivroDAO {
 
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Erro ao buscar livro por ID", e);
+            showError("ERRO");
         }
         return livro;
     }
