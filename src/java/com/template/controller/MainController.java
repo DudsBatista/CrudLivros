@@ -21,7 +21,7 @@ public class MainController
     @FXML private TextField txtId;
     @FXML private TextField txtTitulo;
     @FXML private TextField txtAutor;
-    @FXML private TextField txtAno;
+    @FXML private TextField txtAno; //variaveis novs
 
     // Label para exibir mensagens de feedback ao usuário (sucesso ou erro)
     @FXML private Label lblMensagem;

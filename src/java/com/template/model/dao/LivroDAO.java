@@ -53,7 +53,7 @@ public class LivroDAO {
 
                 lista.add(livro);
             }
-
+//atualizar o dao
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Erro ao listar livros", e);
             showError("ERRO");
