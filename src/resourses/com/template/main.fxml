@@ -5,68 +5,219 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.template.controller.MainController">
+<AnchorPane
+        prefHeight="400.0"
+        prefWidth="600.0"
+        xmlns="http://javafx.com/javafx/26"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="com.template.controller.MainController">
+
    <children>
-      <Pane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #E6D7FF;">
+      <Pane
+              prefHeight="400.0"
+              prefWidth="600.0"
+              style="-fx-background-color: #E6D7FF;">
+
          <children>
-            <Label layoutX="171.0" layoutY="28.0" prefHeight="42.0" prefWidth="230.0" text="Cadastrar Livros">
+
+            <Label
+                    layoutX="171.0"
+                    layoutY="28.0"
+                    prefHeight="42.0"
+                    prefWidth="230.0"
+                    text="Cadastrar Livros">
                <font>
-                  <Font name="Yuppy SC Regular" size="30.0" />
+                  <Font
+                          name="System Bold"
+                          size="30.0" />
                </font>
             </Label>
-            <TableView fx:id="tabelaLivros" layoutX="51.0" layoutY="206.0" onMouseClicked="#selecionarLivro" prefHeight="161.0" prefWidth="406.0" style="-fx-background-color: #C8A2C8;">
-              <columns>
-                <TableColumn fx:id="colId" prefWidth="38.0" style="-fx-background-color: #D8BFD8;" text="Id" />
-                <TableColumn fx:id="colTitulo" prefWidth="138.0" style="-fx-background-color: #D8BFD8;" text="Titulo" />
-                  <TableColumn fx:id="colAutor" prefWidth="143.0" style="-fx-background-color: #D8BFD8;" text="Autor" />
-                  <TableColumn fx:id="colAno" prefWidth="86.0" style="-fx-background-color: #D8BFD8;" text="Ano" />
-              </columns>
+
+            <TableView
+                    fx:id="tabelaLivros"
+                    layoutX="51.0"
+                    layoutY="206.0"
+                    prefHeight="161.0"
+                    prefWidth="406.0"
+                    style="-fx-background-color: #C8A2C8;">
+
+               <columns>
+                  <TableColumn
+                          fx:id="colId"
+                          prefWidth="38.0"
+                          text="ID" />
+
+                  <TableColumn
+                          fx:id="colTitulo"
+                          prefWidth="138.0"
+                          text="Título" />
+
+                  <TableColumn
+                          fx:id="colAutor"
+                          prefWidth="143.0"
+                          text="Autor" />
+
+                  <TableColumn
+                          fx:id="colAno"
+                          prefWidth="86.0"
+                          text="Ano" />
+               </columns>
             </TableView>
-            <VBox layoutX="496.0" layoutY="105.0" prefHeight="190.0" prefWidth="78.0" spacing="15.0">
+
+            <VBox
+                    layoutX="496.0"
+                    layoutY="105.0"
+                    prefHeight="190.0"
+                    prefWidth="94.0"
+                    spacing="15.0">
+
                <children>
-                  <Button fx:id="btnCadastrar" mnemonicParsing="false" onAction="#btnCadastrarAction" prefHeight="26.0" prefWidth="85.0" style="-fx-background-color: #2E8B57;" text="Cadastrar" textFill="WHITE" />
-                  <Button fx:id="btnAtualizar" mnemonicParsing="false" onAction="#btnAtualizarAction" prefHeight="26.0" prefWidth="86.0" style="-fx-background-color: #3CB371;" text="Atualizar" textFill="WHITE" />
-                  <Button fx:id="btnListar" mnemonicParsing="false" onAction="#btnListarAction" prefHeight="26.0" prefWidth="94.0" style="-fx-background-color: #F5DEB3;" text="Listar" />
-                  <Button fx:id="btnLimpar" mnemonicParsing="false" onAction="#btnLimparAction" prefHeight="26.0" prefWidth="77.0" style="-fx-background-color: #FF6347;" text="Limpar" textFill="WHITE" />
-                  <Button fx:id="btnApagar" mnemonicParsing="false" onAction="#btnApagarAction" prefHeight="26.0" prefWidth="88.0" style="-fx-background-color: #FF0000;" text="Apagar" textFill="WHITE" />
+                  <Button
+                          fx:id="btnCadastrar"
+                          mnemonicParsing="false"
+                          onAction="#btnCadastrarAction"
+                          prefHeight="26.0"
+                          prefWidth="94.0"
+                          style="-fx-background-color: #2E8B57;"
+                          text="Cadastrar"
+                          textFill="WHITE" />
+
+                  <Button
+                          fx:id="btnAtualizar"
+                          mnemonicParsing="false"
+                          onAction="#btnAtualizarAction"
+                          prefHeight="26.0"
+                          prefWidth="94.0"
+                          style="-fx-background-color: #3CB371;"
+                          text="Atualizar"
+                          textFill="WHITE" />
+
+                  <Button
+                          fx:id="btnListar"
+                          mnemonicParsing="false"
+                          onAction="#btnListarAction"
+                          prefHeight="26.0"
+                          prefWidth="94.0"
+                          style="-fx-background-color: #F5DEB3;"
+                          text="Listar" />
+
+                  <Button
+                          fx:id="btnLimpar"
+                          mnemonicParsing="false"
+                          onAction="#btnLimparAction"
+                          prefHeight="26.0"
+                          prefWidth="94.0"
+                          style="-fx-background-color: #FF6347;"
+                          text="Limpar"
+                          textFill="WHITE" />
+
+                  <Button
+                          fx:id="btnApagar"
+                          mnemonicParsing="false"
+                          onAction="#btnApagarAction"
+                          prefHeight="26.0"
+                          prefWidth="94.0"
+                          style="-fx-background-color: #FF0000;"
+                          text="Apagar"
+                          textFill="WHITE" />
                </children>
             </VBox>
-            <VBox layoutX="143.0" layoutY="96.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
+
+            <VBox
+                    layoutX="143.0"
+                    layoutY="96.0"
+                    prefHeight="50.0"
+                    prefWidth="126.0"
+                    spacing="10.0">
+
                <children>
-                  <TextField fx:id="txtId" prefHeight="26.0" prefWidth="126.0" />
-                  <TextField fx:id="txtAno" prefHeight="26.0" prefWidth="126.0" />
+                  <TextField
+                          fx:id="txtId"
+                          prefHeight="26.0"
+                          prefWidth="126.0"
+                          promptText="ID do livro" />
+
+                  <TextField
+                          fx:id="txtAno"
+                          prefHeight="26.0"
+                          prefWidth="126.0"
+                          promptText="Ano de publicação" />
                </children>
             </VBox>
-            <VBox layoutX="321.0" layoutY="96.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
+
+            <VBox
+                    layoutX="321.0"
+                    layoutY="96.0"
+                    prefHeight="50.0"
+                    prefWidth="126.0"
+                    spacing="10.0">
+
                <children>
-                  <TextField fx:id="txtTitulo" prefHeight="26.0" prefWidth="126.0" />
-                  <TextField fx:id="txtAutor" prefHeight="26.0" prefWidth="126.0" />
+                  <TextField
+                          fx:id="txtTitulo"
+                          prefHeight="26.0"
+                          prefWidth="126.0"
+                          promptText="Título do livro" />
+
+                  <TextField
+                          fx:id="txtAutor"
+                          prefHeight="26.0"
+                          prefWidth="126.0"
+                          promptText="Autor do livro" />
                </children>
             </VBox>
-            <Label layoutX="121.0" layoutY="96.0" prefHeight="17.0" prefWidth="20.0" text="ID:" />
-            <Label layoutX="278.0" layoutY="105.0" prefHeight="17.0" prefWidth="37.0" text="Título:">
+
+            <Label
+                    layoutX="105.0"
+                    layoutY="101.0"
+                    text="ID:" />
+
+            <Label
+                    layoutX="278.0"
+                    layoutY="101.0"
+                    text="Título:">
                <font>
-                  <Font name="System Bold Italic" size="13.0" />
-               </font></Label>
-            <Label layoutX="278.0" layoutY="136.0" prefHeight="17.0" prefWidth="37.0" text="Autor:" />
-            <Label layoutX="51.0" layoutY="136.0" prefHeight="7.0" prefWidth="104.0" text="Ano Publicação:">
+                  <Font
+                          name="System Bold"
+                          size="13.0" />
+               </font>
+            </Label>
+
+            <Label
+                    layoutX="278.0"
+                    layoutY="136.0"
+                    text="Autor:">
                <font>
-                  <Font name="System Bold" size="13.0" />
-               </font></Label>
-            <ImageView fitHeight="76.0" fitWidth="67.0" layoutX="421.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../../../../Downloads/livros-removebg-preview.png" />
-               </image>
-            </ImageView>
-            <Label fx:id="lblMensagem" layoutX="103.0" layoutY="175.0" prefHeight="17.0" prefWidth="266.0" />
-            <Label layoutX="116.0" layoutY="183.0" />
+                  <Font
+                          name="System Bold"
+                          size="13.0" />
+               </font>
+            </Label>
+
+            <Label
+                    layoutX="51.0"
+                    layoutY="136.0"
+                    text="Ano publicação:">
+               <font>
+                  <Font
+                          name="System Bold"
+                          size="13.0" />
+               </font>
+            </Label>
+
+            <Label
+                    fx:id="lblMensagem"
+                    layoutX="103.0"
+                    layoutY="175.0"
+                    prefHeight="17.0"
+                    prefWidth="360.0"
+                    wrapText="true" />
+
          </children>
       </Pane>
    </children>
