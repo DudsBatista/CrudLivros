@@ -1,0 +1,641 @@
+<html>
+<head>
+<title>MainController.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #7a7e85;}
+.s1 { color: #bcbec4;}
+.s2 { color: #cf8e6d;}
+.s3 { color: #bcbec4;}
+.s4 { color: #6aab73;}
+.s5 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#191a1c">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+MainController.java</font>
+</center></td></tr></table>
+<pre><span class="s0">// Define que essa classe pertence ao pacote &quot;controller&quot;</span>
+<span class="s2">package </span><span class="s1">com</span><span class="s3">.</span><span class="s1">template</span><span class="s3">.</span><span class="s1">controller</span><span class="s3">;</span>
+
+<span class="s0">// Importa o DAO, que é responsável por conversar com o banco de dados</span>
+<span class="s2">import </span><span class="s1">com</span><span class="s3">.</span><span class="s1">template</span><span class="s3">.</span><span class="s1">model</span><span class="s3">.</span><span class="s1">dao</span><span class="s3">.</span><span class="s1">LivroDAO</span><span class="s3">;</span>
+
+<span class="s0">// Importa o DTO, que representa os dados de um livro</span>
+<span class="s2">import </span><span class="s1">com</span><span class="s3">.</span><span class="s1">template</span><span class="s3">.</span><span class="s1">model</span><span class="s3">.</span><span class="s1">dto</span><span class="s3">.</span><span class="s1">LivroDTO</span><span class="s3">;</span>
+
+<span class="s0">// Importa o Validator, responsável por verificar se os dados são válidos</span>
+<span class="s2">import </span><span class="s1">com</span><span class="s3">.</span><span class="s1">template</span><span class="s3">.</span><span class="s1">validator</span><span class="s3">.</span><span class="s1">LivroValidator</span><span class="s3">;</span>
+
+<span class="s0">// Classes do JavaFX usadas para trabalhar com listas</span>
+<span class="s2">import </span><span class="s1">javafx</span><span class="s3">.</span><span class="s1">collections</span><span class="s3">.</span><span class="s1">FXCollections</span><span class="s3">;</span>
+<span class="s2">import </span><span class="s1">javafx</span><span class="s3">.</span><span class="s1">collections</span><span class="s3">.</span><span class="s1">ObservableList</span><span class="s3">;</span>
+
+<span class="s0">// Usado para representar eventos, como clicar em um botão</span>
+<span class="s2">import </span><span class="s1">javafx</span><span class="s3">.</span><span class="s1">event</span><span class="s3">.</span><span class="s1">ActionEvent</span><span class="s3">;</span>
+
+<span class="s0">// Permite conectar os elementos do FXML com o Java</span>
+<span class="s2">import </span><span class="s1">javafx</span><span class="s3">.</span><span class="s1">fxml</span><span class="s3">.</span><span class="s1">FXML</span><span class="s3">;</span>
+
+<span class="s0">// Componentes visuais do JavaFX</span>
+<span class="s2">import </span><span class="s1">javafx</span><span class="s3">.</span><span class="s1">scene</span><span class="s3">.</span><span class="s1">control</span><span class="s3">.</span><span class="s1">Button</span><span class="s3">;</span>
+<span class="s2">import </span><span class="s1">javafx</span><span class="s3">.</span><span class="s1">scene</span><span class="s3">.</span><span class="s1">control</span><span class="s3">.</span><span class="s1">Label</span><span class="s3">;</span>
+<span class="s2">import </span><span class="s1">javafx</span><span class="s3">.</span><span class="s1">scene</span><span class="s3">.</span><span class="s1">control</span><span class="s3">.</span><span class="s1">TableColumn</span><span class="s3">;</span>
+<span class="s2">import </span><span class="s1">javafx</span><span class="s3">.</span><span class="s1">scene</span><span class="s3">.</span><span class="s1">control</span><span class="s3">.</span><span class="s1">TableView</span><span class="s3">;</span>
+<span class="s2">import </span><span class="s1">javafx</span><span class="s3">.</span><span class="s1">scene</span><span class="s3">.</span><span class="s1">control</span><span class="s3">.</span><span class="s1">TextField</span><span class="s3">;</span>
+
+<span class="s0">// Permite definir qual atributo do objeto aparece em cada coluna da tabela</span>
+<span class="s2">import </span><span class="s1">javafx</span><span class="s3">.</span><span class="s1">scene</span><span class="s3">.</span><span class="s1">control</span><span class="s3">.</span><span class="s1">cell</span><span class="s3">.</span><span class="s1">PropertyValueFactory</span><span class="s3">;</span>
+
+
+<span class="s0">// Controller da tela principal</span>
+<span class="s2">public class </span><span class="s1">MainController </span><span class="s3">{</span>
+
+    <span class="s0">// @FXML conecta essas variáveis aos elementos que estão no arquivo FXML</span>
+
+    <span class="s0">// Campo onde o usuário digita o ID do livro</span>
+    <span class="s1">@FXML </span><span class="s2">private </span><span class="s1">TextField txtId</span><span class="s3">;</span>
+
+    <span class="s0">// Campo onde o usuário digita o título</span>
+    <span class="s1">@FXML </span><span class="s2">private </span><span class="s1">TextField txtTitulo</span><span class="s3">;</span>
+
+    <span class="s0">// Campo onde o usuário digita o autor</span>
+    <span class="s1">@FXML </span><span class="s2">private </span><span class="s1">TextField txtAutor</span><span class="s3">;</span>
+
+    <span class="s0">// Campo onde o usuário digita o ano de publicação</span>
+    <span class="s1">@FXML </span><span class="s2">private </span><span class="s1">TextField txtAno</span><span class="s3">;</span>
+
+    <span class="s0">// Label usada para mostrar mensagens na tela</span>
+    <span class="s1">@FXML </span><span class="s2">private </span><span class="s1">Label lblMensagem</span><span class="s3">;</span>
+
+    <span class="s0">// Tabela que mostra os livros</span>
+    <span class="s1">@FXML </span><span class="s2">private </span><span class="s1">TableView</span><span class="s3">&lt;</span><span class="s1">LivroDTO</span><span class="s3">&gt; </span><span class="s1">tabelaLivros</span><span class="s3">;</span>
+
+    <span class="s0">// Colunas da tabela</span>
+    <span class="s1">@FXML </span><span class="s2">private </span><span class="s1">TableColumn</span><span class="s3">&lt;</span><span class="s1">LivroDTO</span><span class="s3">, </span><span class="s1">Integer</span><span class="s3">&gt; </span><span class="s1">colId</span><span class="s3">;</span>
+    <span class="s1">@FXML </span><span class="s2">private </span><span class="s1">TableColumn</span><span class="s3">&lt;</span><span class="s1">LivroDTO</span><span class="s3">, </span><span class="s1">String</span><span class="s3">&gt; </span><span class="s1">colTitulo</span><span class="s3">;</span>
+    <span class="s1">@FXML </span><span class="s2">private </span><span class="s1">TableColumn</span><span class="s3">&lt;</span><span class="s1">LivroDTO</span><span class="s3">, </span><span class="s1">String</span><span class="s3">&gt; </span><span class="s1">colAutor</span><span class="s3">;</span>
+    <span class="s1">@FXML </span><span class="s2">private </span><span class="s1">TableColumn</span><span class="s3">&lt;</span><span class="s1">LivroDTO</span><span class="s3">, </span><span class="s1">Integer</span><span class="s3">&gt; </span><span class="s1">colAno</span><span class="s3">;</span>
+
+    <span class="s0">// Botões da tela</span>
+    <span class="s1">@FXML </span><span class="s2">private </span><span class="s1">Button btnCadastrar</span><span class="s3">;</span>
+    <span class="s1">@FXML </span><span class="s2">private </span><span class="s1">Button btnListar</span><span class="s3">;</span>
+    <span class="s1">@FXML </span><span class="s2">private </span><span class="s1">Button btnApagar</span><span class="s3">;</span>
+    <span class="s1">@FXML </span><span class="s2">private </span><span class="s1">Button btnAtualizar</span><span class="s3">;</span>
+    <span class="s1">@FXML </span><span class="s2">private </span><span class="s1">Button btnLimpar</span><span class="s3">;</span>
+    <span class="s1">@FXML </span><span class="s2">private </span><span class="s1">Button btnBuscar</span><span class="s3">;</span>
+
+
+    <span class="s0">// Cria um objeto LivroDAO.</span>
+    <span class="s0">// Ele será usado para cadastrar, buscar, atualizar e excluir livros no banco.</span>
+    <span class="s2">private final </span><span class="s1">LivroDAO livroDAO </span><span class="s3">= </span><span class="s2">new </span><span class="s1">LivroDAO</span><span class="s3">();</span>
+
+
+    <span class="s0">// Método executado automaticamente quando a tela é inicializada</span>
+    <span class="s1">@FXML</span>
+    <span class="s2">private void </span><span class="s1">initialize</span><span class="s3">() {</span>
+
+        <span class="s0">// Configura o que cada coluna da tabela deve mostrar</span>
+        <span class="s1">configurarTabela</span><span class="s3">();</span>
+
+        <span class="s0">// Faz com que os campos de ID e ano aceitem apenas números</span>
+        <span class="s1">configurarCamposNumericos</span><span class="s3">();</span>
+
+        <span class="s0">// Configura o comportamento quando selecionamos um livro na tabela</span>
+        <span class="s1">configurarSelecaoDaTabela</span><span class="s3">();</span>
+
+        <span class="s0">// Começa sem nenhuma mensagem</span>
+        <span class="s1">lblMensagem</span><span class="s3">.</span><span class="s1">setText</span><span class="s3">(</span><span class="s4">&quot;&quot;</span><span class="s3">);</span>
+
+        <span class="s0">// Carrega os livros do banco para a tabela</span>
+        <span class="s1">carregarLivros</span><span class="s3">();</span>
+    <span class="s3">}</span>
+
+
+    <span class="s0">// Configura as colunas da tabela</span>
+    <span class="s2">private void </span><span class="s1">configurarTabela</span><span class="s3">() {</span>
+
+        <span class="s0">// A coluna ID vai mostrar o atributo &quot;id&quot; do LivroDTO</span>
+        <span class="s1">colId</span><span class="s3">.</span><span class="s1">setCellValueFactory</span><span class="s3">(</span>
+                <span class="s2">new </span><span class="s1">PropertyValueFactory</span><span class="s3">&lt;&gt;(</span><span class="s4">&quot;id&quot;</span><span class="s3">)</span>
+        <span class="s3">);</span>
+
+        <span class="s0">// A coluna Título vai mostrar o atributo &quot;titulo&quot;</span>
+        <span class="s1">colTitulo</span><span class="s3">.</span><span class="s1">setCellValueFactory</span><span class="s3">(</span>
+                <span class="s2">new </span><span class="s1">PropertyValueFactory</span><span class="s3">&lt;&gt;(</span><span class="s4">&quot;titulo&quot;</span><span class="s3">)</span>
+        <span class="s3">);</span>
+
+        <span class="s0">// A coluna Autor vai mostrar o atributo &quot;autor&quot;</span>
+        <span class="s1">colAutor</span><span class="s3">.</span><span class="s1">setCellValueFactory</span><span class="s3">(</span>
+                <span class="s2">new </span><span class="s1">PropertyValueFactory</span><span class="s3">&lt;&gt;(</span><span class="s4">&quot;autor&quot;</span><span class="s3">)</span>
+        <span class="s3">);</span>
+
+        <span class="s0">// A coluna Ano vai mostrar o atributo &quot;ano_publicacao&quot;</span>
+        <span class="s1">colAno</span><span class="s3">.</span><span class="s1">setCellValueFactory</span><span class="s3">(</span>
+                <span class="s2">new </span><span class="s1">PropertyValueFactory</span><span class="s3">&lt;&gt;(</span><span class="s4">&quot;ano_publicacao&quot;</span><span class="s3">)</span>
+        <span class="s3">);</span>
+    <span class="s3">}</span>
+
+
+    <span class="s0">// Configura os campos que devem aceitar apenas números</span>
+    <span class="s2">private void </span><span class="s1">configurarCamposNumericos</span><span class="s3">() {</span>
+
+        <span class="s0">// Observa qualquer alteração feita no campo txtAno</span>
+        <span class="s1">txtAno</span><span class="s3">.</span><span class="s1">textProperty</span><span class="s3">().</span><span class="s1">addListener</span><span class="s3">(</span>
+                <span class="s3">(</span><span class="s1">observable</span><span class="s3">, </span><span class="s1">valorAntigo</span><span class="s3">, </span><span class="s1">valorNovo</span><span class="s3">) </span><span class="s1">-&gt; </span><span class="s3">{</span>
+
+                    <span class="s0">// Se o novo valor tiver algo que não seja número</span>
+                    <span class="s0">// OU tiver mais de 4 caracteres</span>
+                    <span class="s2">if </span><span class="s3">(!</span><span class="s1">valorNovo</span><span class="s3">.</span><span class="s1">matches</span><span class="s3">(</span><span class="s4">&quot;</span><span class="s2">\\</span><span class="s4">d*&quot;</span><span class="s3">)</span>
+                            <span class="s3">|| </span><span class="s1">valorNovo</span><span class="s3">.</span><span class="s1">length</span><span class="s3">() &gt; </span><span class="s5">4</span><span class="s3">) {</span>
+
+                        <span class="s0">// Volta o campo para o valor anterior</span>
+                        <span class="s1">txtAno</span><span class="s3">.</span><span class="s1">setText</span><span class="s3">(</span><span class="s1">valorAntigo</span><span class="s3">);</span>
+                    <span class="s3">}</span>
+                <span class="s3">}</span>
+        <span class="s3">);</span>
+
+
+        <span class="s0">// Faz a mesma coisa para o campo ID</span>
+        <span class="s1">txtId</span><span class="s3">.</span><span class="s1">textProperty</span><span class="s3">().</span><span class="s1">addListener</span><span class="s3">(</span>
+                <span class="s3">(</span><span class="s1">observable</span><span class="s3">, </span><span class="s1">valorAntigo</span><span class="s3">, </span><span class="s1">valorNovo</span><span class="s3">) </span><span class="s1">-&gt; </span><span class="s3">{</span>
+
+                    <span class="s0">// Se o usuário digitar algo que não seja número</span>
+                    <span class="s2">if </span><span class="s3">(!</span><span class="s1">valorNovo</span><span class="s3">.</span><span class="s1">matches</span><span class="s3">(</span><span class="s4">&quot;</span><span class="s2">\\</span><span class="s4">d*&quot;</span><span class="s3">)) {</span>
+
+                        <span class="s0">// Volta para o valor anterior</span>
+                        <span class="s1">txtId</span><span class="s3">.</span><span class="s1">setText</span><span class="s3">(</span><span class="s1">valorAntigo</span><span class="s3">);</span>
+                    <span class="s3">}</span>
+                <span class="s3">}</span>
+        <span class="s3">);</span>
+    <span class="s3">}</span>
+
+
+    <span class="s0">// Configura o que acontece quando o usuário seleciona</span>
+    <span class="s0">// um livro na tabela</span>
+    <span class="s2">private void </span><span class="s1">configurarSelecaoDaTabela</span><span class="s3">() {</span>
+
+        <span class="s0">// Pega o item selecionado atualmente na tabela</span>
+        <span class="s1">tabelaLivros</span><span class="s3">.</span><span class="s1">getSelectionModel</span><span class="s3">()</span>
+                <span class="s3">.</span><span class="s1">selectedItemProperty</span><span class="s3">()</span>
+
+                <span class="s0">// Adiciona um &quot;ouvinte&quot; para perceber quando a seleção muda</span>
+                <span class="s3">.</span><span class="s1">addListener</span><span class="s3">((</span><span class="s1">observable</span><span class="s3">, </span><span class="s1">livroAntigo</span><span class="s3">, </span><span class="s1">livroSelecionado</span><span class="s3">) </span><span class="s1">-&gt; </span><span class="s3">{</span>
+
+                    <span class="s0">// Verifica se realmente existe um livro selecionado</span>
+                    <span class="s2">if </span><span class="s3">(</span><span class="s1">livroSelecionado </span><span class="s3">!= </span><span class="s2">null</span><span class="s3">) {</span>
+
+                        <span class="s0">// Coloca os dados do livro nos campos da tela</span>
+                        <span class="s1">preencherCampos</span><span class="s3">(</span><span class="s1">livroSelecionado</span><span class="s3">);</span>
+                    <span class="s3">}</span>
+                <span class="s3">});</span>
+    <span class="s3">}</span>
+
+
+    <span class="s0">// Carrega os livros do banco de dados para a tabela</span>
+    <span class="s1">@FXML</span>
+    <span class="s2">private void </span><span class="s1">carregarLivros</span><span class="s3">() {</span>
+
+        <span class="s0">// try tenta executar um código que pode gerar erro</span>
+        <span class="s2">try </span><span class="s3">{</span>
+
+            <span class="s0">// Busca todos os livros através do DAO</span>
+            <span class="s0">// e transforma o resultado em uma lista observável do JavaFX</span>
+            <span class="s1">ObservableList</span><span class="s3">&lt;</span><span class="s1">LivroDTO</span><span class="s3">&gt; </span><span class="s1">lista </span><span class="s3">=</span>
+                    <span class="s1">FXCollections</span><span class="s3">.</span><span class="s1">observableArrayList</span><span class="s3">(</span>
+                            <span class="s1">livroDAO</span><span class="s3">.</span><span class="s1">listarLivros</span><span class="s3">()</span>
+                    <span class="s3">);</span>
+
+            <span class="s0">// Coloca a lista de livros dentro da tabela</span>
+            <span class="s1">tabelaLivros</span><span class="s3">.</span><span class="s1">setItems</span><span class="s3">(</span><span class="s1">lista</span><span class="s3">);</span>
+
+        <span class="s3">} </span><span class="s2">catch </span><span class="s3">(</span><span class="s1">Exception e</span><span class="s3">) {</span>
+
+            <span class="s0">// Se acontecer algum erro, mostra uma mensagem</span>
+            <span class="s1">mostrarMensagemNaTela</span><span class="s3">(</span>
+                    <span class="s4">&quot;Erro ao carregar os livros.&quot;</span><span class="s3">,</span>
+                    <span class="s2">true</span>
+            <span class="s3">);</span>
+
+            <span class="s0">// Mostra os detalhes do erro no console</span>
+            <span class="s1">e</span><span class="s3">.</span><span class="s1">printStackTrace</span><span class="s3">();</span>
+        <span class="s3">}</span>
+    <span class="s3">}</span>
+
+
+    <span class="s0">// Método executado quando o botão CADASTRAR é clicado</span>
+    <span class="s1">@FXML</span>
+    <span class="s2">private void </span><span class="s1">btnCadastrarAction</span><span class="s3">(</span><span class="s1">ActionEvent event</span><span class="s3">) {</span>
+
+        <span class="s0">// Pega o texto digitado no campo título</span>
+        <span class="s0">// trim() remove espaços no começo e no final</span>
+        <span class="s1">String titulo </span><span class="s3">= </span><span class="s1">txtTitulo</span><span class="s3">.</span><span class="s1">getText</span><span class="s3">().</span><span class="s1">trim</span><span class="s3">();</span>
+
+        <span class="s0">// Pega o autor digitado</span>
+        <span class="s1">String autor </span><span class="s3">= </span><span class="s1">txtAutor</span><span class="s3">.</span><span class="s1">getText</span><span class="s3">().</span><span class="s1">trim</span><span class="s3">();</span>
+
+        <span class="s0">// Pega o ano digitado</span>
+        <span class="s1">String anoTexto </span><span class="s3">= </span><span class="s1">txtAno</span><span class="s3">.</span><span class="s1">getText</span><span class="s3">().</span><span class="s1">trim</span><span class="s3">();</span>
+
+
+        <span class="s0">// Envia os dados para o Validator verificar</span>
+        <span class="s1">String erro </span><span class="s3">= </span><span class="s1">LivroValidator</span><span class="s3">.</span><span class="s1">validar</span><span class="s3">(</span>
+                <span class="s1">titulo</span><span class="s3">,</span>
+                <span class="s1">autor</span><span class="s3">,</span>
+                <span class="s1">anoTexto</span>
+        <span class="s3">);</span>
+
+
+        <span class="s0">// Se o Validator encontrou algum erro</span>
+        <span class="s2">if </span><span class="s3">(</span><span class="s1">erro </span><span class="s3">!= </span><span class="s2">null</span><span class="s3">) {</span>
+
+            <span class="s0">// Mostra a mensagem de erro</span>
+            <span class="s1">mostrarMensagemNaTela</span><span class="s3">(</span><span class="s1">erro</span><span class="s3">, </span><span class="s2">true</span><span class="s3">);</span>
+
+            <span class="s0">// Para a execução do método</span>
+            <span class="s2">return</span><span class="s3">;</span>
+        <span class="s3">}</span>
+
+
+        <span class="s0">// Cria um novo objeto LivroDTO</span>
+        <span class="s1">LivroDTO livro </span><span class="s3">= </span><span class="s2">new </span><span class="s1">LivroDTO</span><span class="s3">();</span>
+
+        <span class="s0">// Coloca o título digitado dentro do objeto</span>
+        <span class="s1">livro</span><span class="s3">.</span><span class="s1">setTitulo</span><span class="s3">(</span><span class="s1">titulo</span><span class="s3">);</span>
+
+        <span class="s0">// Coloca o autor dentro do objeto</span>
+        <span class="s1">livro</span><span class="s3">.</span><span class="s1">setAutor</span><span class="s3">(</span><span class="s1">autor</span><span class="s3">);</span>
+
+        <span class="s0">// Converte o ano de String para int</span>
+        <span class="s0">// e coloca dentro do objeto</span>
+        <span class="s1">livro</span><span class="s3">.</span><span class="s1">setAno_publicacao</span><span class="s3">(</span>
+                <span class="s1">Integer</span><span class="s3">.</span><span class="s1">parseInt</span><span class="s3">(</span><span class="s1">anoTexto</span><span class="s3">)</span>
+        <span class="s3">);</span>
+
+
+        <span class="s2">try </span><span class="s3">{</span>
+
+            <span class="s0">// Envia o livro para o DAO cadastrar no banco</span>
+            <span class="s1">livroDAO</span><span class="s3">.</span><span class="s1">cadastrarLivro</span><span class="s3">(</span><span class="s1">livro</span><span class="s3">);</span>
+
+
+            <span class="s0">// Mostra mensagem de sucesso</span>
+            <span class="s1">mostrarMensagemNaTela</span><span class="s3">(</span>
+                    <span class="s4">&quot;Livro cadastrado com sucesso!&quot;</span><span class="s3">,</span>
+                    <span class="s2">false</span>
+            <span class="s3">);</span>
+
+
+            <span class="s0">// Atualiza a tabela</span>
+            <span class="s1">carregarLivros</span><span class="s3">();</span>
+
+            <span class="s0">// Limpa os campos</span>
+            <span class="s1">limparCampos</span><span class="s3">();</span>
+
+        <span class="s3">} </span><span class="s2">catch </span><span class="s3">(</span><span class="s1">Exception e</span><span class="s3">) {</span>
+
+            <span class="s0">// Se ocorrer algum erro no cadastro</span>
+            <span class="s1">mostrarMensagemNaTela</span><span class="s3">(</span>
+                    <span class="s4">&quot;Erro ao cadastrar o livro.&quot;</span><span class="s3">,</span>
+                    <span class="s2">true</span>
+            <span class="s3">);</span>
+
+            <span class="s0">// Mostra o erro no console</span>
+            <span class="s1">e</span><span class="s3">.</span><span class="s1">printStackTrace</span><span class="s3">();</span>
+        <span class="s3">}</span>
+    <span class="s3">}</span>
+
+
+    <span class="s0">// Método executado quando o botão LISTAR é clicado</span>
+    <span class="s1">@FXML</span>
+    <span class="s2">private void </span><span class="s1">btnListarAction</span><span class="s3">(</span><span class="s1">ActionEvent event</span><span class="s3">) {</span>
+
+        <span class="s0">// Recarrega os livros do banco</span>
+        <span class="s1">carregarLivros</span><span class="s3">();</span>
+
+        <span class="s0">// Mostra mensagem de sucesso</span>
+        <span class="s1">mostrarMensagemNaTela</span><span class="s3">(</span>
+                <span class="s4">&quot;Lista de livros atualizada!&quot;</span><span class="s3">,</span>
+                <span class="s2">false</span>
+        <span class="s3">);</span>
+    <span class="s3">}</span>
+
+
+    <span class="s0">// Método executado quando o botão BUSCAR é clicado</span>
+    <span class="s1">@FXML</span>
+    <span class="s2">private void </span><span class="s1">btnBuscarAction</span><span class="s3">(</span><span class="s1">ActionEvent event</span><span class="s3">) {</span>
+
+        <span class="s0">// Verifica se o campo ID está vazio</span>
+        <span class="s2">if </span><span class="s3">(</span><span class="s1">txtId</span><span class="s3">.</span><span class="s1">getText</span><span class="s3">().</span><span class="s1">isBlank</span><span class="s3">()) {</span>
+
+            <span class="s0">// Mostra uma mensagem de erro</span>
+            <span class="s1">mostrarMensagemNaTela</span><span class="s3">(</span>
+                    <span class="s4">&quot;Digite um ID para buscar.&quot;</span><span class="s3">,</span>
+                    <span class="s2">true</span>
+            <span class="s3">);</span>
+
+            <span class="s0">// Para o método</span>
+            <span class="s2">return</span><span class="s3">;</span>
+        <span class="s3">}</span>
+
+
+        <span class="s0">// Converte o ID de String para int</span>
+        <span class="s2">int </span><span class="s1">id </span><span class="s3">= </span><span class="s1">Integer</span><span class="s3">.</span><span class="s1">parseInt</span><span class="s3">(</span><span class="s1">txtId</span><span class="s3">.</span><span class="s1">getText</span><span class="s3">());</span>
+
+
+        <span class="s2">try </span><span class="s3">{</span>
+
+            <span class="s0">// Procura no banco um livro com aquele ID</span>
+            <span class="s1">LivroDTO livro </span><span class="s3">= </span><span class="s1">livroDAO</span><span class="s3">.</span><span class="s1">buscarPorId</span><span class="s3">(</span><span class="s1">id</span><span class="s3">);</span>
+
+
+            <span class="s0">// Se não encontrou nenhum livro</span>
+            <span class="s2">if </span><span class="s3">(</span><span class="s1">livro </span><span class="s3">== </span><span class="s2">null</span><span class="s3">) {</span>
+
+                <span class="s0">// Mostra mensagem</span>
+                <span class="s1">mostrarMensagemNaTela</span><span class="s3">(</span>
+                        <span class="s4">&quot;Livro não encontrado.&quot;</span><span class="s3">,</span>
+                        <span class="s2">true</span>
+                <span class="s3">);</span>
+
+                <span class="s0">// Para o método</span>
+                <span class="s2">return</span><span class="s3">;</span>
+            <span class="s3">}</span>
+
+
+            <span class="s0">// Se encontrou, coloca os dados nos campos</span>
+            <span class="s1">preencherCampos</span><span class="s3">(</span><span class="s1">livro</span><span class="s3">);</span>
+
+
+            <span class="s0">// Mostra mensagem de sucesso</span>
+            <span class="s1">mostrarMensagemNaTela</span><span class="s3">(</span>
+                    <span class="s4">&quot;Livro encontrado!&quot;</span><span class="s3">,</span>
+                    <span class="s2">false</span>
+            <span class="s3">);</span>
+
+        <span class="s3">} </span><span class="s2">catch </span><span class="s3">(</span><span class="s1">Exception e</span><span class="s3">) {</span>
+
+            <span class="s0">// Caso aconteça algum erro</span>
+            <span class="s1">mostrarMensagemNaTela</span><span class="s3">(</span>
+                    <span class="s4">&quot;Erro ao buscar o livro.&quot;</span><span class="s3">,</span>
+                    <span class="s2">true</span>
+            <span class="s3">);</span>
+
+            <span class="s0">// Mostra o erro no console</span>
+            <span class="s1">e</span><span class="s3">.</span><span class="s1">printStackTrace</span><span class="s3">();</span>
+        <span class="s3">}</span>
+    <span class="s3">}</span>
+
+
+    <span class="s0">// Método executado quando o botão ATUALIZAR é clicado</span>
+    <span class="s1">@FXML</span>
+    <span class="s2">private void </span><span class="s1">btnAtualizarAction</span><span class="s3">(</span><span class="s1">ActionEvent event</span><span class="s3">) {</span>
+
+        <span class="s0">// Verifica se existe um ID</span>
+        <span class="s2">if </span><span class="s3">(</span><span class="s1">txtId</span><span class="s3">.</span><span class="s1">getText</span><span class="s3">().</span><span class="s1">isBlank</span><span class="s3">()) {</span>
+
+            <span class="s0">// Sem ID não sabemos qual livro atualizar</span>
+            <span class="s1">mostrarMensagemNaTela</span><span class="s3">(</span>
+                    <span class="s4">&quot;Selecione ou informe o ID do livro.&quot;</span><span class="s3">,</span>
+                    <span class="s2">true</span>
+            <span class="s3">);</span>
+
+            <span class="s2">return</span><span class="s3">;</span>
+        <span class="s3">}</span>
+
+
+        <span class="s0">// Pega os dados digitados</span>
+        <span class="s1">String titulo </span><span class="s3">= </span><span class="s1">txtTitulo</span><span class="s3">.</span><span class="s1">getText</span><span class="s3">().</span><span class="s1">trim</span><span class="s3">();</span>
+        <span class="s1">String autor </span><span class="s3">= </span><span class="s1">txtAutor</span><span class="s3">.</span><span class="s1">getText</span><span class="s3">().</span><span class="s1">trim</span><span class="s3">();</span>
+        <span class="s1">String anoTexto </span><span class="s3">= </span><span class="s1">txtAno</span><span class="s3">.</span><span class="s1">getText</span><span class="s3">().</span><span class="s1">trim</span><span class="s3">();</span>
+
+
+        <span class="s0">// Valida os dados</span>
+        <span class="s1">String erro </span><span class="s3">= </span><span class="s1">LivroValidator</span><span class="s3">.</span><span class="s1">validar</span><span class="s3">(</span>
+                <span class="s1">titulo</span><span class="s3">,</span>
+                <span class="s1">autor</span><span class="s3">,</span>
+                <span class="s1">anoTexto</span>
+        <span class="s3">);</span>
+
+
+        <span class="s0">// Se houver erro, mostra a mensagem e para</span>
+        <span class="s2">if </span><span class="s3">(</span><span class="s1">erro </span><span class="s3">!= </span><span class="s2">null</span><span class="s3">) {</span>
+            <span class="s1">mostrarMensagemNaTela</span><span class="s3">(</span><span class="s1">erro</span><span class="s3">, </span><span class="s2">true</span><span class="s3">);</span>
+            <span class="s2">return</span><span class="s3">;</span>
+        <span class="s3">}</span>
+
+
+        <span class="s0">// Cria um objeto para representar o livro</span>
+        <span class="s1">LivroDTO livro </span><span class="s3">= </span><span class="s2">new </span><span class="s1">LivroDTO</span><span class="s3">();</span>
+
+        <span class="s0">// Define qual livro será atualizado</span>
+        <span class="s1">livro</span><span class="s3">.</span><span class="s1">setId</span><span class="s3">(</span><span class="s1">Integer</span><span class="s3">.</span><span class="s1">parseInt</span><span class="s3">(</span><span class="s1">txtId</span><span class="s3">.</span><span class="s1">getText</span><span class="s3">()));</span>
+
+        <span class="s0">// Define o novo título</span>
+        <span class="s1">livro</span><span class="s3">.</span><span class="s1">setTitulo</span><span class="s3">(</span><span class="s1">titulo</span><span class="s3">);</span>
+
+        <span class="s0">// Define o novo autor</span>
+        <span class="s1">livro</span><span class="s3">.</span><span class="s1">setAutor</span><span class="s3">(</span><span class="s1">autor</span><span class="s3">);</span>
+
+        <span class="s0">// Define o novo ano</span>
+        <span class="s1">livro</span><span class="s3">.</span><span class="s1">setAno_publicacao</span><span class="s3">(</span>
+                <span class="s1">Integer</span><span class="s3">.</span><span class="s1">parseInt</span><span class="s3">(</span><span class="s1">anoTexto</span><span class="s3">)</span>
+        <span class="s3">);</span>
+
+
+        <span class="s2">try </span><span class="s3">{</span>
+
+            <span class="s0">// Envia o livro para o DAO atualizar no banco</span>
+            <span class="s1">livroDAO</span><span class="s3">.</span><span class="s1">atualizarLivro</span><span class="s3">(</span><span class="s1">livro</span><span class="s3">);</span>
+
+
+            <span class="s0">// Mostra mensagem de sucesso</span>
+            <span class="s1">mostrarMensagemNaTela</span><span class="s3">(</span>
+                    <span class="s4">&quot;Dados atualizados com sucesso!&quot;</span><span class="s3">,</span>
+                    <span class="s2">false</span>
+            <span class="s3">);</span>
+
+
+            <span class="s0">// Atualiza a tabela</span>
+            <span class="s1">carregarLivros</span><span class="s3">();</span>
+
+            <span class="s0">// Limpa os campos</span>
+            <span class="s1">limparCampos</span><span class="s3">();</span>
+
+        <span class="s3">} </span><span class="s2">catch </span><span class="s3">(</span><span class="s1">Exception e</span><span class="s3">) {</span>
+
+            <span class="s0">// Mostra mensagem de erro</span>
+            <span class="s1">mostrarMensagemNaTela</span><span class="s3">(</span>
+                    <span class="s4">&quot;Erro ao atualizar o livro.&quot;</span><span class="s3">,</span>
+                    <span class="s2">true</span>
+            <span class="s3">);</span>
+
+            <span class="s1">e</span><span class="s3">.</span><span class="s1">printStackTrace</span><span class="s3">();</span>
+        <span class="s3">}</span>
+    <span class="s3">}</span>
+
+
+    <span class="s0">// Método executado quando o botão APAGAR é clicado</span>
+    <span class="s1">@FXML</span>
+    <span class="s2">private void </span><span class="s1">btnApagarAction</span><span class="s3">(</span><span class="s1">ActionEvent event</span><span class="s3">) {</span>
+
+        <span class="s0">// Verifica se existe um ID</span>
+        <span class="s2">if </span><span class="s3">(</span><span class="s1">txtId</span><span class="s3">.</span><span class="s1">getText</span><span class="s3">().</span><span class="s1">isBlank</span><span class="s3">()) {</span>
+
+            <span class="s0">// Se não tiver ID, não sabe qual livro apagar</span>
+            <span class="s1">mostrarMensagemNaTela</span><span class="s3">(</span>
+                    <span class="s4">&quot;Digite ou selecione o ID para apagar.&quot;</span><span class="s3">,</span>
+                    <span class="s2">true</span>
+            <span class="s3">);</span>
+
+            <span class="s2">return</span><span class="s3">;</span>
+        <span class="s3">}</span>
+
+
+        <span class="s0">// Converte o ID de String para int</span>
+        <span class="s2">int </span><span class="s1">id </span><span class="s3">= </span><span class="s1">Integer</span><span class="s3">.</span><span class="s1">parseInt</span><span class="s3">(</span><span class="s1">txtId</span><span class="s3">.</span><span class="s1">getText</span><span class="s3">());</span>
+
+
+        <span class="s2">try </span><span class="s3">{</span>
+
+            <span class="s0">// Pede para o DAO excluir o livro do banco</span>
+            <span class="s1">livroDAO</span><span class="s3">.</span><span class="s1">deletarLivro</span><span class="s3">(</span><span class="s1">id</span><span class="s3">);</span>
+
+
+            <span class="s0">// Mostra mensagem de sucesso</span>
+            <span class="s1">mostrarMensagemNaTela</span><span class="s3">(</span>
+                    <span class="s4">&quot;Livro excluído com sucesso!&quot;</span><span class="s3">,</span>
+                    <span class="s2">false</span>
+            <span class="s3">);</span>
+
+
+            <span class="s0">// Atualiza a tabela</span>
+            <span class="s1">carregarLivros</span><span class="s3">();</span>
+
+            <span class="s0">// Limpa os campos</span>
+            <span class="s1">limparCampos</span><span class="s3">();</span>
+
+        <span class="s3">} </span><span class="s2">catch </span><span class="s3">(</span><span class="s1">Exception e</span><span class="s3">) {</span>
+
+            <span class="s0">// Mostra mensagem de erro</span>
+            <span class="s1">mostrarMensagemNaTela</span><span class="s3">(</span>
+                    <span class="s4">&quot;Erro ao excluir o livro.&quot;</span><span class="s3">,</span>
+                    <span class="s2">true</span>
+            <span class="s3">);</span>
+
+            <span class="s1">e</span><span class="s3">.</span><span class="s1">printStackTrace</span><span class="s3">();</span>
+        <span class="s3">}</span>
+    <span class="s3">}</span>
+
+
+    <span class="s0">// Método executado quando o botão LIMPAR é clicado</span>
+    <span class="s1">@FXML</span>
+    <span class="s2">private void </span><span class="s1">btnLimparAction</span><span class="s3">(</span><span class="s1">ActionEvent event</span><span class="s3">) {</span>
+
+        <span class="s0">// Limpa todos os campos</span>
+        <span class="s1">limparCampos</span><span class="s3">();</span>
+
+        <span class="s0">// Mostra mensagem</span>
+        <span class="s1">mostrarMensagemNaTela</span><span class="s3">(</span>
+                <span class="s4">&quot;Campos limpos!&quot;</span><span class="s3">,</span>
+                <span class="s2">false</span>
+        <span class="s3">);</span>
+    <span class="s3">}</span>
+
+
+    <span class="s0">// Método chamado quando um livro é selecionado</span>
+    <span class="s1">@FXML</span>
+    <span class="s2">private void </span><span class="s1">selecionarLivro</span><span class="s3">() {</span>
+
+        <span class="s0">// Pega o livro atualmente selecionado na tabela</span>
+        <span class="s1">LivroDTO livro </span><span class="s3">= </span><span class="s1">tabelaLivros</span>
+                <span class="s3">.</span><span class="s1">getSelectionModel</span><span class="s3">()</span>
+                <span class="s3">.</span><span class="s1">getSelectedItem</span><span class="s3">();</span>
+
+
+        <span class="s0">// Verifica se algum livro foi selecionado</span>
+        <span class="s2">if </span><span class="s3">(</span><span class="s1">livro </span><span class="s3">!= </span><span class="s2">null</span><span class="s3">) {</span>
+
+            <span class="s0">// Coloca os dados dele nos campos</span>
+            <span class="s1">preencherCampos</span><span class="s3">(</span><span class="s1">livro</span><span class="s3">);</span>
+        <span class="s3">}</span>
+    <span class="s3">}</span>
+
+
+    <span class="s0">// Preenche os campos da tela com os dados de um livro</span>
+    <span class="s2">private void </span><span class="s1">preencherCampos</span><span class="s3">(</span><span class="s1">LivroDTO livro</span><span class="s3">) {</span>
+
+        <span class="s0">// Coloca o ID no campo ID</span>
+        <span class="s1">txtId</span><span class="s3">.</span><span class="s1">setText</span><span class="s3">(</span><span class="s1">String</span><span class="s3">.</span><span class="s1">valueOf</span><span class="s3">(</span><span class="s1">livro</span><span class="s3">.</span><span class="s1">getId</span><span class="s3">()));</span>
+
+        <span class="s0">// Coloca o título no campo título</span>
+        <span class="s1">txtTitulo</span><span class="s3">.</span><span class="s1">setText</span><span class="s3">(</span><span class="s1">livro</span><span class="s3">.</span><span class="s1">getTitulo</span><span class="s3">());</span>
+
+        <span class="s0">// Coloca o autor no campo autor</span>
+        <span class="s1">txtAutor</span><span class="s3">.</span><span class="s1">setText</span><span class="s3">(</span><span class="s1">livro</span><span class="s3">.</span><span class="s1">getAutor</span><span class="s3">());</span>
+
+        <span class="s0">// Coloca o ano no campo ano</span>
+        <span class="s1">txtAno</span><span class="s3">.</span><span class="s1">setText</span><span class="s3">(</span>
+                <span class="s1">String</span><span class="s3">.</span><span class="s1">valueOf</span><span class="s3">(</span><span class="s1">livro</span><span class="s3">.</span><span class="s1">getAno_publicacao</span><span class="s3">())</span>
+        <span class="s3">);</span>
+
+        <span class="s0">// Apaga qualquer mensagem anterior</span>
+        <span class="s1">lblMensagem</span><span class="s3">.</span><span class="s1">setText</span><span class="s3">(</span><span class="s4">&quot;&quot;</span><span class="s3">);</span>
+    <span class="s3">}</span>
+
+
+    <span class="s0">// Limpa todos os campos da tela</span>
+    <span class="s2">private void </span><span class="s1">limparCampos</span><span class="s3">() {</span>
+
+        <span class="s0">// Limpa o campo ID</span>
+        <span class="s1">txtId</span><span class="s3">.</span><span class="s1">clear</span><span class="s3">();</span>
+
+        <span class="s0">// Limpa o campo título</span>
+        <span class="s1">txtTitulo</span><span class="s3">.</span><span class="s1">clear</span><span class="s3">();</span>
+
+        <span class="s0">// Limpa o campo autor</span>
+        <span class="s1">txtAutor</span><span class="s3">.</span><span class="s1">clear</span><span class="s3">();</span>
+
+        <span class="s0">// Limpa o campo ano</span>
+        <span class="s1">txtAno</span><span class="s3">.</span><span class="s1">clear</span><span class="s3">();</span>
+
+        <span class="s0">// Remove a seleção da tabela</span>
+        <span class="s1">tabelaLivros</span><span class="s3">.</span><span class="s1">getSelectionModel</span><span class="s3">().</span><span class="s1">clearSelection</span><span class="s3">();</span>
+    <span class="s3">}</span>
+
+
+    <span class="s0">// Mostra mensagens para o usuário</span>
+    <span class="s0">// ehErro = true  -&gt; mensagem de erro</span>
+    <span class="s0">// ehErro = false -&gt; mensagem de sucesso</span>
+    <span class="s2">private void </span><span class="s1">mostrarMensagemNaTela</span><span class="s3">(</span>
+            <span class="s1">String texto</span><span class="s3">,</span>
+            <span class="s2">boolean </span><span class="s1">ehErro</span>
+    <span class="s3">) {</span>
+
+        <span class="s0">// Coloca o texto recebido no Label</span>
+        <span class="s1">lblMensagem</span><span class="s3">.</span><span class="s1">setText</span><span class="s3">(</span><span class="s1">texto</span><span class="s3">);</span>
+
+
+        <span class="s0">// Verifica se é uma mensagem de erro</span>
+        <span class="s2">if </span><span class="s3">(</span><span class="s1">ehErro</span><span class="s3">) {</span>
+
+            <span class="s0">// Deixa o texto vermelho e em negrito</span>
+            <span class="s1">lblMensagem</span><span class="s3">.</span><span class="s1">setStyle</span><span class="s3">(</span>
+                    <span class="s4">&quot;-fx-text-fill: #cc0000; &quot;</span>
+                            <span class="s3">+ </span><span class="s4">&quot;-fx-font-weight: bold;&quot;</span>
+            <span class="s3">);</span>
+
+        <span class="s3">} </span><span class="s2">else </span><span class="s3">{</span>
+
+            <span class="s0">// Deixa o texto verde e em negrito</span>
+            <span class="s1">lblMensagem</span><span class="s3">.</span><span class="s1">setStyle</span><span class="s3">(</span>
+                    <span class="s4">&quot;-fx-text-fill: #008000; &quot;</span>
+                            <span class="s3">+ </span><span class="s4">&quot;-fx-font-weight: bold;&quot;</span>
+            <span class="s3">);</span>
+        <span class="s3">}</span>
+    <span class="s3">}</span>
+<span class="s3">}</span></pre>
+</body>
+</html>
