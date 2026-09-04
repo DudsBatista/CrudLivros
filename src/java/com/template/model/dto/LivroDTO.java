@@ -1,7 +1,8 @@
 package com.template.model.dto;
 
-/**
- * Representa os dados de um livro.
+/*
+ * DTO responsável por transportar os dados do livro
+ * entre as diferentes partes da aplicação.
  */
 public class LivroDTO {
 
@@ -10,19 +11,23 @@ public class LivroDTO {
     private String autor;
     private int ano_publicacao;
 
+    // Construtor vazio.
     public LivroDTO() {
     }
 
+    // Construtor completo.
     public LivroDTO(
             int id,
             String titulo,
             String autor,
             int ano_publicacao
     ) {
+
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
-        this.ano_publicacao = ano_publicacao;
+        this.ano_publicacao =
+                ano_publicacao;
     }
 
     public int getId() {
@@ -37,7 +42,10 @@ public class LivroDTO {
         return titulo;
     }
 
-    public void setTitulo(String titulo) {
+    public void setTitulo(
+            String titulo
+    ) {
+
         this.titulo = titulo;
     }
 
@@ -45,7 +53,10 @@ public class LivroDTO {
         return autor;
     }
 
-    public void setAutor(String autor) {
+    public void setAutor(
+            String autor
+    ) {
+
         this.autor = autor;
     }
 
@@ -53,7 +64,11 @@ public class LivroDTO {
         return ano_publicacao;
     }
 
-    public void setAno_publicacao(int ano_publicacao) {
-        this.ano_publicacao = ano_publicacao;
+    public void setAno_publicacao(
+            int ano_publicacao
+    ) {
+
+        this.ano_publicacao =
+                ano_publicacao;
     }
 }

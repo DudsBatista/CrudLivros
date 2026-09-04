@@ -1,52 +1,78 @@
 package com.template.validator;
 
-import java.time.Year;
+import java.util.ArrayList;
+import java.util.List;
 
+import static com.template.util.DialogUtil.showWarning;
 
-/**
- * Classe responsável por validar os dados informados para um livro.
+/*
+ * Classe responsável por validar os dados do livro.
+ *
+ * Ela reúne todos os validadores necessários e executa
+ * cada validação em sequência.
  */
-public class LivroValidator {
+public class LivroValidator implements ILivroValidator {
 
-    public static String validar(
+    @Override
+    public boolean validarLivros(
             String titulo,
             String autor,
             String anoTexto
     ) {
 
-        // Verifica se o título foi informado
-        if (titulo == null || titulo.isBlank()) {
+        // Lista que armazena os validadores dos campos.
+        List<Validador<String>> validadores =
+                new ArrayList<>();
 
-            return "Informe o título do livro.";
-        }
-        // Verifica se o autor foi informado
-        if (autor == null || autor.isBlank()) {
+        // Verifica se o título foi preenchido.
+        validadores.add(
+                new CampoObrigatorioValidador(
+                        "Título",
+                        titulo
+                )
+        );
 
-            return "Informe o autor do livro.";
-        }
-        // Verifica se o ano foi informado
-        if (anoTexto == null || anoTexto.isBlank()) {
+        // Verifica se o autor foi preenchido.
+        validadores.add(
+                new CampoObrigatorioValidador(
+                        "Autor",
+                        autor
+                )
+        );
 
-            return "Informe o ano de publicação.";
-        }
-        int ano;
-        // Tenta transformar o texto em número
-        try {
-            ano = Integer.parseInt(anoTexto);
-        } catch (NumberFormatException e) {
-            return "O ano deve conter apenas números.";
-        }
-        // Descobre o ano atual
-        int anoAtual = Year.now().getValue();
+        // Verifica se o ano foi preenchido.
+        validadores.add(
+                new CampoObrigatorioValidador(
+                        "Ano de publicação",
+                        anoTexto
+                )
+        );
 
-        // Verifica se o ano está no intervalo permitido
-        if (ano < 1000 || ano > anoAtual) {
+        // Verifica se o ano de publicação é válido.
+        validadores.add(
+                new LivroAnoPublicacaoValidator(
+                        anoTexto
+                )
+        );
 
-            return "Informe um ano entre 1000 e "
-                    + anoAtual
-                    + ".";
+        /*
+         * Percorre todos os validadores.
+         * Caso algum deles não seja válido, mostra
+         * a mensagem de aviso e interrompe a validação.
+         */
+        for (Validador<String> validador : validadores) {
+
+            if (!validador.validar()) {
+
+                showWarning(
+                        validador.getMensagemErro()
+                );
+
+                return false;
+            }
         }
-        // Não encontrou nenhum erro
-        return null;
+
+        // Se todos os validadores passaram, os dados são válidos.
+        return true;
     }
 }

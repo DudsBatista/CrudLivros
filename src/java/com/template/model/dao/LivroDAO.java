@@ -9,37 +9,36 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.util.ArrayList;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-/**
- * Classe responsável pelo acesso ao banco de dados
- * relacionado aos livros.
+/*
+ * DAO responsável pelo acesso ao banco de dados.
+ *
+ * Toda operação SQL relacionada aos livros fica nesta classe.
  */
-public class LivroDAO {
+public class LivroDAO implements ILivroDAO {
 
+    // Logger utilizado para registrar erros.
     private static final Logger logger =
             Logger.getLogger(
                     LivroDAO.class.getName()
             );
 
-
-    /**
-     * Cadastra um livro no banco.
-     */
-    public void cadastrarLivro(LivroDTO livro) {
+    // Cadastra um livro no banco.
+    public void cadastrarLivro(
+            LivroDTO livro
+    ) {
 
         String sql =
                 "INSERT INTO livros "
                         + "(titulo, autor, ano_publicacao) "
                         + "VALUES (?, ?, ?)";
 
-
         try (
                 Connection con =
-                        new Conexao().conectabBD();
+                        new Conexao()
+                                .conectabBD();
 
                 PreparedStatement ps =
                         con.prepareStatement(sql)
@@ -62,7 +61,6 @@ public class LivroDAO {
 
             ps.executeUpdate();
 
-
         } catch (SQLException e) {
 
             logger.log(
@@ -71,7 +69,6 @@ public class LivroDAO {
                     e
             );
 
-            // Lança o erro para o Service tratar
             throw new RuntimeException(
                     "Erro ao cadastrar livro.",
                     e
@@ -79,11 +76,9 @@ public class LivroDAO {
         }
     }
 
-
-    /**
-     * Lista todos os livros.
-     */
-    public ArrayList<LivroDTO> listarLivros() {
+    // Retorna todos os livros cadastrados.
+    public ArrayList<LivroDTO>
+    listarLivros() {
 
         ArrayList<LivroDTO> lista =
                 new ArrayList<>();
@@ -91,10 +86,10 @@ public class LivroDAO {
         String sql =
                 "SELECT * FROM livros";
 
-
         try (
                 Connection con =
-                        new Conexao().conectabBD();
+                        new Conexao()
+                                .conectabBD();
 
                 PreparedStatement ps =
                         con.prepareStatement(sql);
@@ -102,7 +97,6 @@ public class LivroDAO {
                 ResultSet rs =
                         ps.executeQuery()
         ) {
-
 
             while (rs.next()) {
 
@@ -122,12 +116,13 @@ public class LivroDAO {
                 );
 
                 livro.setAno_publicacao(
-                        rs.getInt("ano_publicacao")
+                        rs.getInt(
+                                "ano_publicacao"
+                        )
                 );
 
                 lista.add(livro);
             }
-
 
         } catch (SQLException e) {
 
@@ -143,15 +138,13 @@ public class LivroDAO {
             );
         }
 
-
         return lista;
     }
 
-
-    /**
-     * Atualiza um livro.
-     */
-    public void atualizarLivro(LivroDTO livro) {
+    // Atualiza um livro existente.
+    public void atualizarLivro(
+            LivroDTO livro
+    ) {
 
         String sql =
                 "UPDATE livros "
@@ -160,10 +153,10 @@ public class LivroDAO {
                         + "ano_publicacao = ? "
                         + "WHERE id = ?";
 
-
         try (
                 Connection con =
-                        new Conexao().conectabBD();
+                        new Conexao()
+                                .conectabBD();
 
                 PreparedStatement ps =
                         con.prepareStatement(sql)
@@ -191,7 +184,6 @@ public class LivroDAO {
 
             ps.executeUpdate();
 
-
         } catch (SQLException e) {
 
             logger.log(
@@ -207,19 +199,17 @@ public class LivroDAO {
         }
     }
 
-
-    /**
-     * Deleta um livro pelo ID.
-     */
+    // Exclui um livro pelo ID.
     public void deletarLivro(int id) {
 
         String sql =
-                "DELETE FROM livros WHERE id = ?";
-
+                "DELETE FROM livros "
+                        + "WHERE id = ?";
 
         try (
                 Connection con =
-                        new Conexao().conectabBD();
+                        new Conexao()
+                                .conectabBD();
 
                 PreparedStatement ps =
                         con.prepareStatement(sql)
@@ -228,7 +218,6 @@ public class LivroDAO {
             ps.setInt(1, id);
 
             ps.executeUpdate();
-
 
         } catch (SQLException e) {
 
@@ -245,21 +234,21 @@ public class LivroDAO {
         }
     }
 
-
-    /**
-     * Busca um livro pelo ID.
-     */
-    public LivroDTO buscarPorId(int id) {
+    // Busca um livro específico pelo ID.
+    public LivroDTO buscarPorId(
+            int id
+    ) {
 
         String sql =
-                "SELECT * FROM livros WHERE id = ?";
+                "SELECT * FROM livros "
+                        + "WHERE id = ?";
 
         LivroDTO livro = null;
 
-
         try (
                 Connection con =
-                        new Conexao().conectabBD();
+                        new Conexao()
+                                .conectabBD();
 
                 PreparedStatement ps =
                         con.prepareStatement(sql)
@@ -267,32 +256,35 @@ public class LivroDAO {
 
             ps.setInt(1, id);
 
-            ResultSet rs =
-                    ps.executeQuery();
+            try (
+                    ResultSet rs =
+                            ps.executeQuery()
+            ) {
 
+                if (rs.next()) {
 
-            if (rs.next()) {
+                    livro =
+                            new LivroDTO();
 
-                livro =
-                        new LivroDTO();
+                    livro.setId(
+                            rs.getInt("id")
+                    );
 
-                livro.setId(
-                        rs.getInt("id")
-                );
+                    livro.setTitulo(
+                            rs.getString("titulo")
+                    );
 
-                livro.setTitulo(
-                        rs.getString("titulo")
-                );
+                    livro.setAutor(
+                            rs.getString("autor")
+                    );
 
-                livro.setAutor(
-                        rs.getString("autor")
-                );
-
-                livro.setAno_publicacao(
-                        rs.getInt("ano_publicacao")
-                );
+                    livro.setAno_publicacao(
+                            rs.getInt(
+                                    "ano_publicacao"
+                            )
+                    );
+                }
             }
-
 
         } catch (SQLException e) {
 
@@ -307,7 +299,6 @@ public class LivroDAO {
                     e
             );
         }
-
 
         return livro;
     }

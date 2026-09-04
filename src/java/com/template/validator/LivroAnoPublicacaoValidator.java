@@ -1,31 +1,52 @@
 package com.template.validator;
 
-import java.util.Calendar;
+import java.time.Year;
 
-class AnoPublicacaoValidador implements Validador<Integer> {
-    private final String nomeCampo;
-    private final Integer ano;
+/*
+ * Validador responsável por verificar o ano de publicação
+ * do livro.
+ */
+public class LivroAnoPublicacaoValidator
+        implements Validador<String> {
 
-    public AnoPublicacaoValidador(String nomeCampo, Integer ano) {
-        this.nomeCampo = nomeCampo;
+    private final String ano;
+
+    public LivroAnoPublicacaoValidator(String ano) {
         this.ano = ano;
     }
 
     @Override
-    public boolean validar(Integer valorAtual) {
-        if (this.ano == null) return false;
-        int anoAtual = Calendar.getInstance().get(Calendar.YEAR);
-        return this.ano >= 1450 && this.ano <= anoAtual;
+    public boolean validar() {
+
+        // Verifica se o ano foi preenchido.
+        if (ano == null || ano.isBlank()) {
+            return false;
+        }
+
+        try {
+
+            // Converte o ano de String para inteiro.
+            int anoNumero =
+                    Integer.parseInt(ano.trim());
+
+            // Obtém o ano atual.
+            int anoAtual =
+                    Year.now().getValue();
+
+            // O ano deve estar entre 1000 e o ano atual.
+            return anoNumero >= 1000
+                    && anoNumero <= anoAtual;
+
+        } catch (NumberFormatException e) {
+
+            // Retorna falso caso o valor não seja um número.
+            return false;
+        }
     }
 
     @Override
     public String getMensagemErro() {
-        return "O campo " + nomeCampo + " deve ser um ano válido entre 1450 e o ano atual.";
-    }
 
-    @Override
-    public Integer getValor() {
-        return 0;
+        return "O ano de publicação deve ser válido.";
     }
 }
-

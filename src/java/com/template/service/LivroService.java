@@ -3,65 +3,71 @@ package com.template.service;
 import com.template.model.dao.LivroDAO;
 import com.template.model.dto.LivroDTO;
 import com.template.util.DialogUtil;
-import com.template.validator.LivroValidator;
 
 import java.util.ArrayList;
 
-
-/**
- * Classe responsável pelas operações relacionadas aos livros.
- * O Service faz a ligação entre o Controller e o DAO.
+/*
+ * Service responsável pelas operações relacionadas aos livros.
+ *
+ * Ele faz a comunicação entre o Controller e o DAO.
  */
-public class LivroService {
+public class LivroService
+        implements ILivroService {
 
-    // DAO responsável pelo acesso ao banco
-    private final LivroDAO livroDAO = new LivroDAO();
+    // DAO responsável pelo acesso ao banco de dados.
+    private final LivroDAO livroDAO =
+            new LivroDAO();
 
+    @Override
     public ArrayList<LivroDTO> listarLivros() {
+
         try {
+
+            // Solicita ao DAO a lista de livros.
             return livroDAO.listarLivros();
+
         } catch (Exception e) {
+
+            // Mostra uma mensagem amigável ao usuário.
             DialogUtil.mostrarErro(
                     "Erro ao carregar os livros."
             );
+
             return new ArrayList<>();
         }
     }
+
+    @Override
     public void cadastrarLivro(
             String titulo,
             String autor,
             String anoTexto
     ) {
-        // Remove espaços desnecessários
-        titulo = titulo.trim();
-        autor = autor.trim();
-        anoTexto = anoTexto.trim();
 
-        // Valida os dados
-        String erro = LivroValidator.validar(
-                titulo,
-                autor,
-                anoTexto
+        // Cria um objeto para armazenar os dados do livro.
+        LivroDTO livro =
+                new LivroDTO();
+
+        livro.setTitulo(
+                titulo.trim()
         );
-        // Se houver erro, mostra a mensagem
-        if (erro != null) {
 
-            DialogUtil.mostrarErro(erro);
+        livro.setAutor(
+                autor.trim()
+        );
 
-            return;
-        }
-
-        // Cria o objeto LivroDTO
-        LivroDTO livro = new LivroDTO();
-        livro.setTitulo(titulo);
-        livro.setAutor(autor);
         livro.setAno_publicacao(
-                Integer.parseInt(anoTexto)
+                Integer.parseInt(
+                        anoTexto.trim()
+                )
         );
 
         try {
-            // Envia o livro para o DAO
-            livroDAO.cadastrarLivro(livro);
+
+            // Envia o livro para o DAO cadastrar no banco.
+            livroDAO.cadastrarLivro(
+                    livro
+            );
 
             DialogUtil.mostrarSucesso(
                     "Livro cadastrado com sucesso!"
@@ -75,46 +81,72 @@ public class LivroService {
         }
     }
 
-    public LivroDTO buscarPorId(String idTexto) {
+    @Override
+    public LivroDTO buscarPorId(
+            String idTexto
+    ) {
 
-        // Verifica se o ID foi preenchido
-        if (idTexto == null || idTexto.isBlank()) {
+        // Verifica se o ID foi informado.
+        if (idTexto == null
+                || idTexto.isBlank()) {
+
             DialogUtil.mostrarErro(
                     "Digite um ID para buscar."
             );
+
             return null;
         }
+
         int id;
-        // Converte o ID para inteiro
+
         try {
-            id = Integer.parseInt(idTexto);
+
+            // Converte o ID de String para inteiro.
+            id = Integer.parseInt(
+                    idTexto
+            );
+
         } catch (NumberFormatException e) {
+
             DialogUtil.mostrarErro(
                     "O ID deve conter apenas números."
             );
+
             return null;
         }
+
         try {
+
+            // Procura o livro no banco.
             LivroDTO livro =
                     livroDAO.buscarPorId(id);
-            // Verifica se encontrou
+
             if (livro == null) {
+
                 DialogUtil.mostrarErro(
                         "Livro não encontrado."
                 );
+
                 return null;
             }
+
             DialogUtil.mostrarSucesso(
                     "Livro encontrado!"
             );
+
             return livro;
+
         } catch (Exception e) {
+
             DialogUtil.mostrarErro(
                     "Erro ao buscar o livro."
             );
+
             return null;
         }
     }
+
+    @Override
     public void atualizarLivro(
             String idTexto,
             String titulo,
@@ -122,8 +154,9 @@ public class LivroService {
             String anoTexto
     ) {
 
-        // Verifica o ID
-        if (idTexto == null || idTexto.isBlank()) {
+        // Verifica se o ID foi informado.
+        if (idTexto == null
+                || idTexto.isBlank()) {
 
             DialogUtil.mostrarErro(
                     "Selecione ou informe o ID do livro."
@@ -131,88 +164,120 @@ public class LivroService {
 
             return;
         }
-        // Limpa os espaços
-        titulo = titulo.trim();
-        autor = autor.trim();
-        anoTexto = anoTexto.trim();
 
-        // Valida os dados
-        String erro = LivroValidator.validar(
-                titulo,
-                autor,
-                anoTexto
-        );
-        if (erro != null) {
-            DialogUtil.mostrarErro(erro);
-            return;
-        }
         int id;
+
         try {
-            id = Integer.parseInt(idTexto);
+
+            // Converte o ID para inteiro.
+            id = Integer.parseInt(
+                    idTexto
+            );
+
         } catch (NumberFormatException e) {
+
             DialogUtil.mostrarErro(
                     "O ID deve conter apenas números."
             );
+
             return;
         }
-        // Cria o LivroDTO
-        LivroDTO livro = new LivroDTO();
+
+        // Cria o objeto com os novos dados.
+        LivroDTO livro =
+                new LivroDTO();
+
         livro.setId(id);
-        livro.setTitulo(titulo);
-        livro.setAutor(autor);
-        livro.setAno_publicacao(
-                Integer.parseInt(anoTexto)
+
+        livro.setTitulo(
+                titulo.trim()
         );
+
+        livro.setAutor(
+                autor.trim()
+        );
+
+        livro.setAno_publicacao(
+                Integer.parseInt(
+                        anoTexto.trim()
+                )
+        );
+
         try {
-            livroDAO.atualizarLivro(livro);
+
+            // Envia os dados atualizados ao DAO.
+            livroDAO.atualizarLivro(
+                    livro
+            );
+
             DialogUtil.mostrarSucesso(
                     "Dados atualizados com sucesso!"
             );
+
         } catch (Exception e) {
+
             DialogUtil.mostrarErro(
                     "Erro ao atualizar o livro."
             );
         }
     }
 
+    @Override
+    public void deletarLivro(
+            String idTexto
+    ) {
 
-    /**
-     * Exclui um livro pelo ID.
-     */
-    public void deletarLivro(String idTexto) {
-
-        // Verifica se o ID foi preenchido
-        if (idTexto == null || idTexto.isBlank()) {
+        // Verifica se o ID foi informado.
+        if (idTexto == null
+                || idTexto.isBlank()) {
 
             DialogUtil.mostrarErro(
                     "Digite ou selecione o ID para apagar."
             );
+
             return;
         }
+
         int id;
+
         try {
-            id = Integer.parseInt(idTexto); } catch (NumberFormatException e) {
+
+            // Converte o ID para inteiro.
+            id = Integer.parseInt(
+                    idTexto
+            );
+
+        } catch (NumberFormatException e) {
+
             DialogUtil.mostrarErro(
                     "O ID deve conter apenas números."
             );
+
             return;
         }
-        // Confirma a exclusão
+
+        // Pergunta ao usuário antes de excluir.
         boolean confirmou =
                 DialogUtil.confirmar(
                         "Excluir livro",
                         "Tem certeza que deseja excluir este livro?"
                 );
+
         if (!confirmou) {
             return;
         }
+
         try {
+
+            // Solicita ao DAO a exclusão.
             livroDAO.deletarLivro(id);
+
             DialogUtil.mostrarSucesso(
                     "Livro excluído com sucesso!"
             );
 
         } catch (Exception e) {
+
             DialogUtil.mostrarErro(
                     "Erro ao excluir o livro."
             );
