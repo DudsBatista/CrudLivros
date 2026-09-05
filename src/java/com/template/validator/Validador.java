@@ -8,10 +8,8 @@ package com.template.validator;
  * alterar os validadores que já existem.
  */
 public interface Validador<T> {
-
     // Executa a validação.
     boolean validar();
-
     // Retorna a mensagem caso a validação falhe.
     String getMensagemErro();
 }
