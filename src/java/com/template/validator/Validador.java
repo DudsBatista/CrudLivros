@@ -12,4 +12,6 @@ public interface Validador<T> {
     boolean validar();
     // Retorna a mensagem caso a validação falhe.
     String getMensagemErro();
+    T getValor();
+
 }

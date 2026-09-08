@@ -8,18 +8,14 @@ import javafx.scene.control.TextField;
  * Neste caso, ela centraliza a limpeza dos campos.
  */
 public final class TelaUtil {
+
+
     // Impede a criação de objetos dessa classe.
     private TelaUtil() {
 
     }
     // Limpa os campos e a seleção da tabela.
-    public static void limparCampos(
-            TextField txtId,
-            TextField txtTitulo,
-            TextField txtAutor,
-            TextField txtAno,
-            TableView<LivroDTO> tabelaLivros
-    ) {
+    public static void limparCampos(TextField txtId, TextField txtTitulo, TextField txtAutor, TextField txtAno, TableView<LivroDTO> tabelaLivros) {
         txtId.clear();
         txtTitulo.clear();
         txtAutor.clear();

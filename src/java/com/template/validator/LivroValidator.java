@@ -10,42 +10,24 @@ import static com.template.util.DialogUtil.showWarning;
  * cada validação em sequência.
  */
 public class LivroValidator implements ILivroValidator {
-    @Override
-    public boolean validarLivros(
-            String titulo,
-            String autor,
-            String anoTexto
-    ) {
+
+    @Override public boolean validarLivros(String titulo, String autor, String anoTexto) {
+
         // Lista que armazena os validadores dos campos.
-        List<Validador<String>> validadores =
-                new ArrayList<>();
+        List<Validador<String>> validadores = new ArrayList<>();
+
         // Verifica se o título foi preenchido.
-        validadores.add(
-                new CampoObrigatorioValidador(
-                        "Título",
-                        titulo
-                )
-        );
+        validadores.add(new CampoObrigatorioValidador("Título", titulo));
+
         // Verifica se o autor foi preenchido.
-        validadores.add(
-                new CampoObrigatorioValidador(
-                        "Autor",
-                        autor
-                )
-        );
+        validadores.add(new CampoObrigatorioValidador("Autor", autor));
+
         // Verifica se o ano foi preenchido.
-        validadores.add(
-                new CampoObrigatorioValidador(
-                        "Ano de publicação",
-                        anoTexto
-                )
-        );
+        validadores.add(new CampoObrigatorioValidador("Ano de publicação", anoTexto));
+
         // Verifica se o ano de publicação é válido.
-        validadores.add(
-                new LivroAnoPublicacaoValidator(
-                        anoTexto
-                )
-        );
+        validadores.add(new LivroAnoPublicacaoValidator(anoTexto));
+
         /*
          * Percorre todos os validadores.
          * Caso algum deles não seja válido, mostra
@@ -53,9 +35,7 @@ public class LivroValidator implements ILivroValidator {
          */
         for (Validador<String> validador : validadores) {
             if (!validador.validar()) {
-                showWarning(
-                        validador.getMensagemErro()
-                );
+                showWarning(validador.getMensagemErro());
                 return false;
             }
         }
